@@ -9,6 +9,7 @@ CONFIG_FILE = os.path.join(BASEDIR + '/config.ini')
 settings.read(CONFIG_FILE)
 
 REDIS_SET = settings.get('Production', 'redis_set')
+REDIS_HOST = settings.get('Production', 'redis_host')
 
 
 @route('/feed')
@@ -20,5 +21,5 @@ def get_feed():
     return output
 
 
-r = redis.Redis(host="localhost", port="6379")
+r = redis.Redis(host=REDIS_HOST, port="6379")
 run(host='localhost', port=8888, debug=True, reloader=True)

@@ -16,6 +16,7 @@ base_url = settings.get('Production', 'BASE_URL')
 CLIENT_ID = settings.get('Production', 'CLIENT_ID')
 CLIENT_SECRET = settings.get('Production', 'CLIENT_SECRET')
 GROUP_ID = settings.get('Production', 'GROUP_ID')
+REDIS_HOST = settings.get('Production', 'REDIS_HOST')
 REDIS_SET = settings.get('Production', 'redis_set')
 
 
@@ -46,7 +47,8 @@ def store_id_to_redis(key):
     r.zaddnx(REDIS_SET, key, timestamp)
 
 
-r = redis.Redis(host="localhost", port="6379")
+# Program starts here
+r = redis.Redis(host=REDIS_HOST, port="6379")
 print("== Program started ==")
 while 1:
     update_feed()

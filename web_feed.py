@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from bottle import route, run
 import configparser
 import os

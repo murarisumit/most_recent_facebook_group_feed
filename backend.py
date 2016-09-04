@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import requests
 import json
 import redis
@@ -5,6 +7,7 @@ from datetime import datetime
 import time
 import configparser
 import os
+import sys
 
 
 settings = configparser.ConfigParser()
@@ -21,8 +24,10 @@ REDIS_SET = settings.get('Production', 'redis_set')
 
 
 def update_feed():
-    access_token = get_access_token()
-    feed = requests.get(base_url + '/v2.7/' + GROUP_ID + '?fields=feed.limit(20).since(60)', params={'access_token': access_token})
+    try:
+        feed = requests.get(base_url + '/v2.7/' + GROUP_ID + '?fields=feed.limit(20).since(60)', params={'access_token': access_token})
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
     parsed_json = json.loads(feed.text)
     ids = get_ids(parsed_json)
     return ids
@@ -50,6 +55,7 @@ def store_id_to_redis(key):
 # Program starts here
 r = redis.Redis(host=REDIS_HOST, port="6379")
 print("== Program started ==")
+access_token = get_access_token()
 while 1:
     update_feed()
     print(" == Going to sleep == ")

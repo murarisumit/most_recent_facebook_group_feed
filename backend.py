@@ -10,17 +10,6 @@ import os
 import sys
 
 
-settings = configparser.ConfigParser()
-BASEDIR = os.path.dirname(os.path.realpath(__file__))
-CONFIG_FILE = os.path.join(BASEDIR + '/config.ini')
-settings.read(CONFIG_FILE)
-base_url = settings.get('Production', 'BASE_URL')
-CLIENT_ID = settings.get('Production', 'CLIENT_ID')
-CLIENT_SECRET = settings.get('Production', 'CLIENT_SECRET')
-GROUP_ID = settings.get('Production', 'GROUP_ID')
-REDIS_HOST = settings.get('Production', 'REDIS_HOST')
-REDIS_SET = settings.get('Production', 'redis_set')
-
 
 def update_feed():
     try:
@@ -52,8 +41,23 @@ def store_id_to_redis(key):
 
 
 if __name__ == "__main__":
-    r = redis.Redis(host=REDIS_HOST, port="6379")
+
     print("== Program started ==")
+    settings = configparser.ConfigParser()
+    ENV = os.environ["ENVIRONMENT"]
+    settings = configparser.ConfigParser()
+    BASEDIR = os.path.dirname(os.path.realpath(__file__))
+    CONFIG_FILE = os.path.join(BASEDIR + '/' + ENV + '_config.ini')
+    settings.read(CONFIG_FILE)
+
+    base_url = settings.get(ENV, 'BASE_URL')
+    CLIENT_ID = settings.get(ENV, 'CLIENT_ID')
+    CLIENT_SECRET = settings.get(ENV, 'CLIENT_SECRET')
+    GROUP_ID = settings.get(ENV, 'GROUP_ID')
+    REDIS_HOST = settings.get(ENV, 'REDIS_HOST')
+    REDIS_SET = settings.get(ENV, 'redis_set')
+
+    r = redis.Redis(host=REDIS_HOST, port="6379")
     access_token = get_access_token()
     while 1:
         update_feed()

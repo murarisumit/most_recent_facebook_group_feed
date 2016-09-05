@@ -13,7 +13,6 @@ import sys
 settings = configparser.ConfigParser()
 BASEDIR = os.path.dirname(os.path.realpath(__file__))
 CONFIG_FILE = os.path.join(BASEDIR + '/config.ini')
-print(CONFIG_FILE)
 settings.read(CONFIG_FILE)
 base_url = settings.get('Production', 'BASE_URL')
 CLIENT_ID = settings.get('Production', 'CLIENT_ID')
@@ -52,12 +51,12 @@ def store_id_to_redis(key):
     r.zaddnx(REDIS_SET, key, timestamp)
 
 
-# Program starts here
-r = redis.Redis(host=REDIS_HOST, port="6379")
-print("== Program started ==")
-access_token = get_access_token()
-while 1:
-    update_feed()
-    print(" == Going to sleep == ")
-    time.sleep(20)
-    print(datetime.strftime(datetime.now(), "%Y%m%d%H%M%S.%f"))
+if __name__ == "__main__":
+    r = redis.Redis(host=REDIS_HOST, port="6379")
+    print("== Program started ==")
+    access_token = get_access_token()
+    while 1:
+        update_feed()
+        print(" == Going to sleep == ")
+        time.sleep(20)
+        print(datetime.strftime(datetime.now(), "%Y%m%d%H%M%S.%f"))

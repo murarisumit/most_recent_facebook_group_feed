@@ -26,6 +26,6 @@ if __name__ == "__main__":
     RELOADER = settings.get(ENV, 'RELOADER')
 
     r = redis.Redis(host=REDIS_HOST, port="6379")
-    run(host='localhost', server='gunicorn', workers=4,
+    run(host='0.0.0.0', server='gunicorn', workers=4,
         port=PORT, debug=DEBUG, reloader=RELOADER
         )

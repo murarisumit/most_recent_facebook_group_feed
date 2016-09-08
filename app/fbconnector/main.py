@@ -1,14 +1,11 @@
 #!/usr/bin/python3
-
 import requests
 import json
 import redis
 from datetime import datetime
 import time
-import configparser
-import os
 import sys
-
+import definations
 
 
 def update_feed():
@@ -41,20 +38,15 @@ def store_id_to_redis(key):
 
 
 if __name__ == "__main__":
-
     print("== Program started ==")
-    settings = configparser.ConfigParser()
-    ENV = os.environ["ENVIRONMENT"]
-    settings = configparser.ConfigParser()
-    BASEDIR = os.path.dirname(os.path.realpath(__file__))
-    CONFIG_FILE = os.path.join(BASEDIR + '/' + ENV + '_config.ini')
-    settings.read(CONFIG_FILE)
+    settings = definations.settings
+    ENV = definations.ENV
 
-    base_url = settings.get(ENV, 'BASE_URL')
-    CLIENT_ID = settings.get(ENV, 'CLIENT_ID')
-    CLIENT_SECRET = settings.get(ENV, 'CLIENT_SECRET')
-    GROUP_ID = settings.get(ENV, 'GROUP_ID')
-    REDIS_HOST = settings.get(ENV, 'REDIS_HOST')
+    base_url = settings.get(ENV, 'base_url')
+    CLIENT_ID = settings.get(ENV, 'client_id')
+    CLIENT_SECRET = settings.get(ENV, 'client_secret')
+    GROUP_ID = settings.get(ENV, 'group_id')
+    REDIS_HOST = settings.get(ENV, 'redis_host')
     REDIS_SET = settings.get(ENV, 'redis_set')
 
     r = redis.Redis(host=REDIS_HOST, port="6379")

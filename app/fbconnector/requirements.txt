@@ -1,4 +1,3 @@
 configparser==3.5.0
 requests==2.11.1
-bottle==0.12.9
 -e git+https://github.com/chester89/redis-py.git@zadd-options#egg=redis

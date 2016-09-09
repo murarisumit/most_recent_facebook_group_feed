@@ -3,15 +3,23 @@
 from bottle import route, run
 import redis
 import json
+from datetime import datetime
 
 import definations
 
 
 @route('/feed')
 def get_feed():
-    output = []
-    for item in r.zrange(REDIS_SET, 0, -1):
-        output.append(item.decode('utf-8'))
+    output = [item.decode('utf-8') for item in r.zrange(REDIS_SET, 0, -1)]
+    feeds = json.dumps(output)
+    return feeds
+
+
+# Get feeds after a specific time
+@route('/pfeed/<aftertime>')
+def get_feed_after_score(aftertime):
+    now = datetime.strftime(datetime.now(), "%Y%m%d%H%M%S.%f")
+    output = [item.decode('utf-8') for item in r.zrangebyscore(REDIS_SET, aftertime, now)]
     feeds = json.dumps(output)
     return feeds
 
